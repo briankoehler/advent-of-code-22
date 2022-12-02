@@ -1,78 +1,121 @@
 use crate::utils::{read_lines, Solution};
-use std::{collections::HashMap, str::FromStr};
+use std::{str::FromStr};
+
+#[derive(Debug, PartialEq)]
+enum Choice {
+    Rock = 1,
+    Paper = 2,
+    Scissors = 3,
+}
+
+impl FromStr for Choice {
+    type Err = String;
+
+    fn from_str(input: &str) -> Result<Self, Self::Err> {
+        match input {
+            "A" | "X" => Ok(Choice::Rock),
+            "B" | "Y" => Ok(Choice::Paper),
+            "C" | "Z" => Ok(Choice::Scissors),
+            _ => Err(String::from("Invalid")),
+        }
+    }
+}
+
+impl Choice {
+    fn get_win(&self) -> Choice {
+        match *self {
+            Choice::Rock => Choice::Scissors,
+            Choice::Paper => Choice::Rock,
+            Choice::Scissors => Choice::Paper,
+        }
+    }
+
+    fn get_loss(&self) -> Choice {
+        match *self {
+            Choice::Rock => Choice::Paper,
+            Choice::Paper => Choice::Scissors,
+            Choice::Scissors => Choice::Rock,
+        }
+    }
+}
+
+#[derive(Debug, PartialEq)]
+enum Outcome {
+    Loss = 0,
+    Draw = 3,
+    Win = 6,
+}
+
+impl FromStr for Outcome {
+    type Err = String;
+
+    fn from_str(input: &str) -> Result<Self, Self::Err> {
+        match input {
+            "X" => Ok(Outcome::Loss),
+            "Y" => Ok(Outcome::Draw),
+            "Z" => Ok(Outcome::Win),
+            _ => Err(String::from("Invalid")),
+        }
+    }
+}
 
 pub struct Day2 {
     pub input_path: String,
-    scores: HashMap<&'static str, u64>,
 }
 
 impl Solution for Day2 {
     fn new(input_path: String) -> Self {
-        Self {
-            input_path,
-            scores: HashMap::from([("X", 1), ("Y", 2), ("Z", 3)]),
-        }
+        Self { input_path }
     }
     
-    fn part_1(&self) -> u64 {
-        let scores = &self.scores;
-        let equivalents = HashMap::from([("X", "A"), ("Y", "B"), ("Z", "C")]);
-        let wins = HashMap::from([("X", "C"), ("Y", "A"), ("Z", "B")]);
-
+    fn part_1(&self) -> Result<u64, Box<dyn std::error::Error>> {
         let mut score = 0;
+        let lines = read_lines(&self.input_path)?;
 
-        if let Ok(lines) = read_lines(&self.input_path) {
-            for line in lines {
-                if let Ok(matchup) = line {
-                    let choices: Vec<&str> = matchup.split(" ").collect();
-                    let opponent_choice = choices[0];
-                    let my_choice = choices[1];
+        for line in lines {
+            if let Ok(matchup) = line {
+                let choices: Vec<&str> = matchup.split(" ").collect();
+                let opponent_choice = Choice::from_str(choices[0])?;
+                let my_choice = Choice::from_str(choices[1])?;
 
-                    // Draw
-                    if equivalents[my_choice] == opponent_choice {
-                        score = score + 3;
-                    }
-                    // Win
-                    if wins[my_choice] == opponent_choice {
-                        score = score + 6;
-                    }
-                    score = score + scores[my_choice];
+                if my_choice == opponent_choice {
+                    score = score + Outcome::Draw as u64;
                 }
+                else if my_choice.get_win() == opponent_choice {
+                    score = score + Outcome::Win as u64;
+                }
+                else {
+                    score = score + Outcome::Loss as u64;
+                }
+                score = score + my_choice as u64;
             }
         }
-        score
+        Ok(score)
     }
 
-    fn part_2(&self) -> u64 {
-        let scores = &self.scores;
-        let equivalents = HashMap::from([("A", "X"), ("B", "Y"), ("C", "Z")]);
-        let wins = HashMap::from([("C", "X"), ("A", "Y"), ("B", "Z")]);
-        let losses = HashMap::from([("C", "Y"), ("A", "Z"), ("B", "X")]);
-
+    fn part_2(&self) -> Result<u64, Box<dyn std::error::Error>> {
         let mut score = 0;
+        let lines = read_lines(&self.input_path)?;
 
-        if let Ok(lines) = read_lines(&self.input_path) {
-            for line in lines {
-                if let Ok(matchup) = line {
-                    let tokens: Vec<&str> = matchup.split(" ").collect();
-                    let opponent_choice = tokens[0];
-                    let outcome = tokens[1];
+        for line in lines {
+            if let Ok(matchup) = line {
+                let tokens: Vec<&str> = matchup.split(" ").collect();
+                let opponent_choice = Choice::from_str(tokens[0])?;
+                let outcome = Outcome::from_str(tokens[1])?;
 
-                    match outcome {
-                        "X" => score = score + scores[losses[opponent_choice]],
-                        "Y" => {
-                            score = score + scores[equivalents[opponent_choice]];
-                            score = score + 3;
-                        },
-                        "Z" => {
-                            score = score + scores[wins[opponent_choice]];
-                            score = score + 6;
-                        }
-                        _ => {}
+                match outcome {
+                    Outcome::Loss => score = score + opponent_choice.get_win() as u64,
+                    Outcome::Draw => {
+                        score = score + opponent_choice as u64;
+                        score = score + 3;
+                    },
+                    Outcome::Win => {
+                        score = score + opponent_choice.get_loss() as u64;
+                        score = score + 6;
                     }
                 }
             }
         }
-        score
+        Ok(score)
     }
 }

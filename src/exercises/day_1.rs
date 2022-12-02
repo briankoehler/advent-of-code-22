@@ -10,7 +10,7 @@ impl Solution for Day1 {
         Self { input_path }
     }
 
-    fn part_1(&self) -> u64 {
+    fn part_1(&self) -> Result<u64, Box<dyn std::error::Error>> {
         let mut max = 0;
         let mut current_sum = 0;
 
@@ -23,15 +23,15 @@ impl Solution for Day1 {
                         continue;
                     }
 
-                    let value: u32 = weight.parse().unwrap();
+                    let value: u32 = weight.parse()?;
                     current_sum = current_sum + value;
                 }
             }
         }
-        max.into()
+        Ok(max.into())
     }
 
-    fn part_2(&self) -> u64 {
+    fn part_2(&self) -> Result<u64, Box<dyn std::error::Error>> {
         let mut top_three: Vec<u32> = vec![];
         let mut current_sum = 0;
 
@@ -58,12 +58,12 @@ impl Solution for Day1 {
                         continue;
                     }
 
-                    let value: u32 = weight.parse().unwrap();
+                    let value: u32 = weight.parse()?;
                     current_sum = current_sum + value;
                 }
             }
         }
         let total: u32 = top_three.iter().sum();
-        total.into()
+        Ok(total.into())
     }
 }
