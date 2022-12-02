@@ -16,14 +16,14 @@ impl Solution for Day1 {
 
         if let Ok(lines) = read_lines(&self.input_path) {
             for line in lines {
-                if let Ok(weight_str) = line {
-                    if weight_str.is_empty() {
+                if let Ok(weight) = line {
+                    if weight.is_empty() {
                         max = cmp::max(max, current_sum);
                         current_sum = 0;
                         continue;
                     }
 
-                    let value: u32 = weight_str.parse().unwrap();
+                    let value: u32 = weight.parse().unwrap();
                     current_sum = current_sum + value;
                 }
             }
