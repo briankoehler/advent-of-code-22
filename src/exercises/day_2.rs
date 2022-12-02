@@ -73,22 +73,18 @@ impl Solution for Day2 {
         let lines = read_lines(&self.input_path)?;
 
         for line in lines {
-            if let Ok(matchup) = line {
-                let choices: Vec<&str> = matchup.split(" ").collect();
-                let opponent_choice = Choice::from_str(choices[0])?;
-                let my_choice = Choice::from_str(choices[1])?;
+            let matchup = line?;
+            let choices: Vec<&str> = matchup.split(" ").collect();
 
-                if my_choice == opponent_choice {
-                    score = score + Outcome::Draw as u64;
-                }
-                else if my_choice.get_win() == opponent_choice {
-                    score = score + Outcome::Win as u64;
-                }
-                else {
-                    score = score + Outcome::Loss as u64;
-                }
-                score = score + my_choice as u64;
-            }
+            let opponent_choice = Choice::from_str(choices[0])?;
+            let my_choice = Choice::from_str(choices[1])?;
+
+            let outcome_bonus = match opponent_choice {
+                opponent_choice if my_choice == opponent_choice => Outcome::Draw as u64,
+                opponent_choice if opponent_choice == my_choice.get_win() => Outcome::Win as u64,
+                _ => Outcome::Loss as u64,
+            };
+            score = score + my_choice as u64 + outcome_bonus;
         }
         Ok(score)
     }
@@ -98,23 +94,18 @@ impl Solution for Day2 {
         let lines = read_lines(&self.input_path)?;
 
         for line in lines {
-            if let Ok(matchup) = line {
-                let tokens: Vec<&str> = matchup.split(" ").collect();
-                let opponent_choice = Choice::from_str(tokens[0])?;
-                let outcome = Outcome::from_str(tokens[1])?;
+            let matchup = line?;
+            let tokens: Vec<&str> = matchup.split(" ").collect();
 
-                match outcome {
-                    Outcome::Loss => score = score + opponent_choice.get_win() as u64,
-                    Outcome::Draw => {
-                        score = score + opponent_choice as u64;
-                        score = score + 3;
-                    },
-                    Outcome::Win => {
-                        score = score + opponent_choice.get_loss() as u64;
-                        score = score + 6;
-                    }
-                }
-            }
+            let opponent_choice = Choice::from_str(tokens[0])?;
+            let outcome = Outcome::from_str(tokens[1])?;
+
+            let my_choice_bonus = match outcome {
+                Outcome::Loss => opponent_choice.get_win() as u64,
+                Outcome::Draw => opponent_choice as u64,
+                Outcome::Win => opponent_choice.get_loss() as u64,
+            };
+            score = score + outcome as u64 + my_choice_bonus;
         }
         Ok(score)
     }
