@@ -24,7 +24,7 @@ impl Solution for Day1 {
                     }
 
                     let value: u32 = weight.parse()?;
-                    current_sum = current_sum + value;
+                    current_sum += value;
                 }
             }
         }
@@ -59,7 +59,7 @@ impl Solution for Day1 {
                     }
 
                     let value: u32 = weight.parse()?;
-                    current_sum = current_sum + value;
+                    current_sum += value;
                 }
             }
         }

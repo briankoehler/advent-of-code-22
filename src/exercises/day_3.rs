@@ -9,6 +9,13 @@ fn get_uniques_from_str<S: AsRef<str>>(stringlike: S) -> HashSet<char> {
     HashSet::from_iter(items)
 }
 
+fn get_priority_score(item: &char) -> u32 {
+    match item.is_ascii_uppercase() {
+        true => *item as u32 - UPPERCASE_OFFSET,
+        false => *item as u32 - LOWERCASE_OFFSET,
+    }
+}
+
 pub struct Day3 {
     input_path: String
 }
@@ -32,11 +39,7 @@ impl Solution for Day3 {
             let uniques_2 = get_uniques_from_str(compartment_2);
             
             let common: Vec<_> = uniques_1.intersection(&uniques_2).collect();
-            let item = common[0];
-            match item.is_ascii_uppercase() {
-                true => priority_sum = priority_sum + (*item as u32 - UPPERCASE_OFFSET),
-                false => priority_sum = priority_sum + (*item as u32 - LOWERCASE_OFFSET),
-            }
+            priority_sum += get_priority_score(common[0]);
         }
         Ok(priority_sum.into())
     }
@@ -47,20 +50,15 @@ impl Solution for Day3 {
 
         let mut priority_sum = 0;
         for group in lines.windows(3).step_by(3) {
-            let uniques_1 = get_uniques_from_str(group[0].as_str());
-            let uniques_2 = get_uniques_from_str(group[1].as_str());
-            let uniques_3 = get_uniques_from_str(group[2].as_str());
+            let uniques_1 = get_uniques_from_str(&group[0]);
+            let uniques_2 = get_uniques_from_str(&group[1]);
+            let uniques_3 = get_uniques_from_str(&group[2]);
 
-            let commons: Vec<_> = uniques_1.iter()
+            let common: Vec<_> = uniques_1.iter()
                 .filter(|item| uniques_2.contains(item))
                 .filter(|item| uniques_3.contains(item))
                 .collect();
-
-            let badge = commons[0];
-            match badge.is_ascii_uppercase() {
-                true => priority_sum = priority_sum + (*badge as u32 - UPPERCASE_OFFSET),
-                false => priority_sum = priority_sum + (*badge as u32 - LOWERCASE_OFFSET),
-            }
+            priority_sum += get_priority_score(common[0]);
         }
 
         Ok(priority_sum.into())
