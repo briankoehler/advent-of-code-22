@@ -1,4 +1,4 @@
-use crate::utils::{read_lines, Solution};
+use crate::utils::{read_lines, Solution, solution_check_test};
 use std::{str::FromStr};
 
 #[derive(Debug, PartialEq)]
@@ -110,3 +110,5 @@ impl Solution for Day2 {
         Ok(score)
     }
 }
+
+solution_check_test!(Day2, "day_2.txt", 15, 12);

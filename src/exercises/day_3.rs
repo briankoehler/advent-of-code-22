@@ -1,5 +1,5 @@
 use std::{collections::HashSet};
-use crate::utils::{Solution, read_lines};
+use crate::utils::{Solution, read_lines, solution_check_test};
 
 const LOWERCASE_OFFSET: u32 = 96;
 const UPPERCASE_OFFSET: u32 = 65 - 27;
@@ -64,3 +64,5 @@ impl Solution for Day3 {
         Ok(priority_sum.into())
     }
 }
+
+solution_check_test!(Day3, "day_3.txt", 157, 70);

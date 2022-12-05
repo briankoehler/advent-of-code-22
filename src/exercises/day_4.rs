@@ -1,5 +1,5 @@
 use std::str::FromStr;
-use crate::utils::{Solution, read_lines};
+use crate::utils::{Solution, read_lines, solution_check_test};
 
 struct Assignment {
     pub lower: u32,
@@ -65,3 +65,5 @@ impl Solution for Day4 {
         Ok(count)
     }
 }
+
+solution_check_test!(Day4, "day_4.txt", 2, 4);

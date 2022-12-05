@@ -67,3 +67,5 @@ impl Solution for Day1 {
         Ok(total.into())
     }
 }
+
+// solution_check_test!(Day1, "day_1.txt", 24000, 45000); This fails at the moment lol
