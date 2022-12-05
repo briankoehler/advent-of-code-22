@@ -25,7 +25,7 @@ impl Solution for Day3 {
         Self { input_path }
     }
 
-    fn part_1(&self) -> Result<u64, Box<dyn std::error::Error>> {
+    fn part_1(&self) -> Result<String, Box<dyn std::error::Error>> {
         let lines = read_lines(&self.input_path)?;
 
         let mut priority_sum = 0;
@@ -41,10 +41,10 @@ impl Solution for Day3 {
             let common: Vec<_> = uniques_1.intersection(&uniques_2).collect();
             priority_sum += get_priority_score(common[0]);
         }
-        Ok(priority_sum.into())
+        Ok(priority_sum.to_string())
     }
 
-    fn part_2(&self) -> Result<u64, Box<dyn std::error::Error>> {
+    fn part_2(&self) -> Result<String, Box<dyn std::error::Error>> {
         let lines = read_lines(&self.input_path)?.into_iter();
         let lines: Vec<_> = lines.collect::<Result<_, _>>()?;
 
@@ -61,8 +61,8 @@ impl Solution for Day3 {
             priority_sum += get_priority_score(common[0]);
         }
 
-        Ok(priority_sum.into())
+        Ok(priority_sum.to_string())
     }
 }
 
-solution_check_test!(Day3, "day_3.txt", 157, 70);
+solution_check_test!(Day3, "day_3.txt", "157", "70");

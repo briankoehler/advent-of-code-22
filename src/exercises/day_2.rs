@@ -68,7 +68,7 @@ impl Solution for Day2 {
         Self { input_path }
     }
     
-    fn part_1(&self) -> Result<u64, Box<dyn std::error::Error>> {
+    fn part_1(&self) -> Result<String, Box<dyn std::error::Error>> {
         let mut score = 0;
         let lines = read_lines(&self.input_path)?;
 
@@ -86,10 +86,10 @@ impl Solution for Day2 {
             };
             score = score + my_choice as u64 + outcome_bonus;
         }
-        Ok(score)
+        Ok(score.to_string())
     }
 
-    fn part_2(&self) -> Result<u64, Box<dyn std::error::Error>> {
+    fn part_2(&self) -> Result<String, Box<dyn std::error::Error>> {
         let mut score = 0;
         let lines = read_lines(&self.input_path)?;
 
@@ -107,8 +107,8 @@ impl Solution for Day2 {
             };
             score = score + outcome as u64 + my_choice_bonus;
         }
-        Ok(score)
+        Ok(score.to_string())
     }
 }
 
-solution_check_test!(Day2, "day_2.txt", 15, 12);
+solution_check_test!(Day2, "day_2.txt", "15", "12");

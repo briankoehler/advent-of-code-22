@@ -27,7 +27,7 @@ impl Solution for Day4 {
         Self { input_path }
     }
 
-    fn part_1(&self) -> Result<u64, Box<dyn std::error::Error>> {
+    fn part_1(&self) -> Result<String, Box<dyn std::error::Error>> {
         let lines = read_lines(&self.input_path)?;
 
         let mut count = 0;
@@ -43,10 +43,10 @@ impl Solution for Day4 {
             }
         }
 
-        Ok(count)
+        Ok(count.to_string())
     }
 
-    fn part_2(&self) -> Result<u64, Box<dyn std::error::Error>> {
+    fn part_2(&self) -> Result<String, Box<dyn std::error::Error>> {
         let lines = read_lines(&self.input_path)?;
 
         let mut count = 0;
@@ -62,8 +62,8 @@ impl Solution for Day4 {
             }
         }
 
-        Ok(count)
+        Ok(count.to_string())
     }
 }
 
-solution_check_test!(Day4, "day_4.txt", 2, 4);
+solution_check_test!(Day4, "day_4.txt", "2", "4");
