@@ -49,6 +49,7 @@ impl Solution for Day1 {
                                 .min_by(|(_, a), (_, b)| a.cmp(b))
                                 .unwrap();
                             if &current_sum > min_pair.1 {
+                                #[allow(mutable_borrow_reservation_conflict)]
                                 top_three.remove(min_pair.0);
                                 top_three.push(current_sum);
                             }
