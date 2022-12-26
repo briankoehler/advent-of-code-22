@@ -20,6 +20,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         4 => Box::new(Day4::new(input_path)),
         5 => Box::new(Day5::new(input_path)),
         6 => Box::new(Day6::new(input_path)),
+        7 => Box::new(Day7::new(input_path)),
         _ => panic!("Day not found."),
     };
 

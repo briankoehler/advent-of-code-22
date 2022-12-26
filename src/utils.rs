@@ -22,7 +22,12 @@ macro_rules! solution_check_test {
             
             #[test]
             fn test_solution() -> Result<(), Box<dyn std::error::Error>> {
-                let solution = $day::new(String::from(format!("./inputs/tests/{}", $file)));
+                let filename = String::from(format!("./inputs/tests/{}", $file));
+                if !std::path::Path::new(&filename).exists() {
+                    println!("Test file not found.");
+                    return Ok(())
+                }
+                let solution = $day::new(filename);
                 assert_eq!(solution.part_1()?, $p1_answer);
                 assert_eq!(solution.part_2()?, $p2_answer);
                 Ok(())
